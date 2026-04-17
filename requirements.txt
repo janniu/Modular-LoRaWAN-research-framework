@@ -1,0 +1,25 @@
+
+---
+
+## ⚙️ Requirements
+
+### System
+- Linux / macOS (recommended)
+- Bash shell
+
+### Perl Dependencies
+- Text::CSV
+- Statistics::Basic
+- Statistics::Descriptive
+- Math::Random
+
+Install (example):
+
+
+### Python Dependencies
+- Python 3.x
+- pandas
+- numpy
+- matplotlib
+
+Install:
