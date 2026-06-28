@@ -1,64 +1,97 @@
-﻿# LoRaWAN Gateway Selection Optimization Framework
+# Modular LoRaWAN Research Framework for Gateway Selection and Adaptive Data Rate Evaluation
 
-This repository contains the implementation of the proposed Modular LoRaWAN Research Framework for gateway selection and adaptive data rate (ADR) evaluation. The framework provides configurable communication models, environmental interference modelling, packet reception, collision handling, gateway duty-cycle management, energy modelling, and statistical performance evaluation within a unified simulation environment.
-**"Metaheuristic-Based Gateway Selection for Scalable LoRaWAN Downlink Communication"**
+This repository contains the implementation of a **modular LoRaWAN research framework** designed for the development, integration, and evaluation of gateway selection and Adaptive Data Rate (ADR) algorithms.
 
-The framework evaluates multiple optimization algorithms for gateway
-selection in LoRaWAN under realistic network constraints, including
-interference, duty-cycle limitations, and adaptive data rate (ADR).
+The framework provides configurable communication models, propagation and RSSI modelling, environmental interference, packet reception, collision and capture modelling, gateway duty-cycle management, ADR adaptation, energy modelling, and statistical performance evaluation within a unified simulation environment.
+
+The repository also includes the implementation of the algorithms presented in the following work:
+
+> **Multi-Objective LoRaWAN Downlink Gateway Selection Using Evolutionary and CoATI-Based Metaheuristic Approaches**
+
+These algorithms are integrated as representative case studies within the framework and can be evaluated under identical communication and network configurations.
 
 ---
 
-## Key Features
+# Key Features
 
-- Multi-scenario evaluation:
-  - Industrial
-  - Suburban
-  - Rural–Agricultural
+## Modular Research Framework
 
-- Optimization algorithms:
-  - CoATI
-  - Improved-CoATI
-  - Binary-CoATI
-  - Genetic Algorithm (GA)
-  - Particle Swarm Optimization (PSO)
-  - Heuristic baselines (Alg-HR, Alg-LB, Alg-LBHR)
+* Configurable LoRaWAN communication models
+* Gateway selection evaluation interface
+* Adaptive Data Rate (ADR) support
+* Environmental interference modelling
+* Packet reception and collision modelling
+* Capture effect implementation
+* Gateway duty-cycle management
+* RX1/RX2 downlink scheduling
+* Energy modelling
+* Statistical performance evaluation
 
-- Realistic LoRaWAN modeling:
-  - Duty-cycle constraints
-  - RX1 / RX2 downlink windows
-  - Capture effect and collision modeling
-  - ADR-based parameter adaptation
+---
 
-- Performance metrics:
-  - Effective Packet Delivery Ratio (Effective-PDR)
-  - Throughput
-  - Downlink Delay
-  - Gateway Load Fairness
+## Supported Deployment Scenarios
+
+* Industrial
+* Suburban
+* Rural--Agricultural
+
+---
+
+## Representative Gateway Selection Algorithms
+
+* CoATI
+* Improved-CoATI
+* Binary-CoATI
+* Genetic Algorithm (GA)
+* Particle Swarm Optimization (PSO)
+* CBS
+* ICBS
+* BCBS
+* Alg-HR
+* Alg-LB
+* Alg-LBHR
+
+The modular architecture allows researchers to incorporate additional heuristic, metaheuristic, evolutionary, or learning-based gateway selection and ADR algorithms without modifying the underlying communication models.
+
+---
+
+## Performance Metrics
+
+The framework supports comparative evaluation using
+
+* Packet Delivery Ratio (PDR)
+* Effective Packet Delivery Ratio (Effective-PDR)
+* Throughput
+* Downlink Delay
+* Gateway Load Fairness
+* Energy Consumption
+* Packet Collisions
+* Gateway Utilization
+* ACK Success Rate
+* Retransmissions
+* Duty-Cycle Utilization
 
 ---
 
 ## Requirements
 
-- Perl (v5.10+ recommended)
-- Python 3.x
+* Perl (v5.10 or later)
+* Python 3.x
 
 ---
 
-## Repository Purpose
+# Repository Purpose
 
-This repository is provided to ensure reproducibility of the
-simulation results presented in the paper.
+This repository accompanies the research on modular LoRaWAN simulation and gateway selection. It provides the complete framework implementation, representative optimization algorithms, experiment scripts, configuration files, and analysis tools required to reproduce the experimental results presented in the associated publications.
 
-This repository provides a lightweight reproducible configuration.
-Full-scale experiments used in the paper are not executed by default
-to avoid excessive execution time.
+A lightweight configuration is provided for quick validation and functional testing. Full-scale experiments can be executed separately for comprehensive performance evaluation.
 
 ---
 
-## Quick Start
+# Quick Start
 
-Run a quick validation (recommended):
+Run a representative experiment:
 
 ```bash
 ./run.sh
+```
