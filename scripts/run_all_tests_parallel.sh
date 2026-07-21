@@ -18,7 +18,7 @@ TRAFFIC=("periodic")
 CONFIRMED=("0.3")
 WEIGHTS=("Balanced")
 
-ALGS="CoATI,Improved-CoATI,Binary-CoATI,GA,PSO,Alg-HR,Alg-LB,Alg-LBHR"
+ALGS="CoATI,Improved-CoATI,Binary-CoATI,GA,PSO,Alg-HR,Alg-LB,Alg-LBHR,E-Alg-LBHR"
 
 calc_density() { awk -v ed="$1" 'BEGIN { printf "%.2f", ed/100.0 }'; }
 
