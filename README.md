@@ -1,86 +1,71 @@
-# Modular LoRaWAN Research Framework for Gateway Selection and Adaptive Data Rate Evaluation
+# Modular LoRaWAN Research Framework
 
-This repository contains the implementation of a **modular LoRaWAN research framework** designed for the development, integration, and evaluation of gateway selection and Adaptive Data Rate (ADR) algorithms.
+A modular and extensible simulation framework for LoRaWAN research, designed to support the evaluation of communication protocols, gateway-selection strategies, and optimization algorithms under diverse deployment environments.
 
-The framework provides configurable communication models, propagation and RSSI modelling, environmental interference, packet reception, collision and capture modelling, gateway duty-cycle management, ADR adaptation, energy modelling, and statistical performance evaluation within a unified simulation environment.
+The framework provides configurable models for LoRaWAN network operation, including uplink and downlink communication, gateway scheduling, radio propagation, interference, duty-cycle constraints, packet collisions, retransmissions, and energy consumption. Its modular architecture enables researchers to implement and compare different heuristic, metaheuristic, and optimization-based approaches within a consistent simulation environment.
 
-The repository also includes the implementation of the algorithms presented in the following work:
+## Features
 
-> **Multi-Objective LoRaWAN Downlink Gateway Selection Using Lightweight Heuristic and Metaheuristic Approaches**
+- Modular LoRaWAN network simulator
+- Configurable Industrial, Suburban, and Rural deployment scenarios
+- Support for uplink and downlink communication
+- RSSI, SNR, gateway load, and interference modeling
+- Duty-cycle aware gateway scheduling
+- Collision and capture-effect simulation
+- ACK scheduling and retransmission handling
+- Energy consumption modeling
+- Extensible framework for heuristic and metaheuristic algorithms
+- Automated statistical analysis and result generation
 
-These algorithms are integrated as representative case studies within the framework and can be evaluated under identical communication and network configurations.
+## Supported Algorithms
 
----
-
-# Key Features
-
-## Modular Research Framework
-
-* Configurable LoRaWAN communication models
-* Gateway selection evaluation interface
-* Adaptive Data Rate (ADR) support
-* Environmental interference modelling
-* Packet reception and collision modelling
-* Capture effect implementation
-* Gateway duty-cycle management
-* RX1/RX2 downlink scheduling
-* Energy modelling
-* Statistical performance evaluation
-
----
-
-## Supported Deployment Scenarios
-
-* Industrial
-* Suburban
-* Rural--Agricultural
-
----
-
-## Representative Gateway Selection Algorithms
-* Alg-HR
-* Alg-LB
-* Alg-LBHR
-* E-Alg-LBHR
-* CoATI
-* Improved-CoATI
-* Binary-CoATI
-* Genetic Algorithm (GA)
-* Particle Swarm Optimization (PSO)
-
-The modular architecture allows researchers to incorporate additional heuristic, metaheuristic, evolutionary, or learning-based gateway selection and ADR algorithms without modifying the underlying communication models.
-
----
+- Alg-HR
+- Alg-LB
+- Alg-LBHR
+- E-Alg-LBHR
+- CoATI
+- Improved-CoATI
+- Binary-CoATI
+- Genetic Algorithm (GA)
+- Particle Swarm Optimization (PSO)
 
 ## Performance Metrics
 
-The framework supports comparative evaluation using
+The framework supports the evaluation of multiple network and communication performance metrics. Depending on the objectives of a particular study, one or more of the following metrics may be analyzed:
 
-* Downlink Delay
-* ACK Success Rate
-* Retransmissions
+- Packet Delivery Ratio (PDR)
+- ACK Rate
+- Retransmission Rate
+- Communication Delay
+- Throughput
+- Energy Consumption
+- Gateway Utilization
+- Fairness Index
+- Duty-Cycle Utilization
 
----
+## Research Applications
+
+This repository is intended to serve as a reusable research framework for LoRaWAN studies. Different research works may utilize different modules, algorithms, deployment scenarios, and performance metrics depending on their specific objectives. Consequently, not every study necessarily reports all supported metrics or algorithms available within this framework.
 
 ## Requirements
 
-* Perl (v5.10 or later)
-* Python 3.x
+- Perl 5.x
+- Python 3.x
 
----
-
-# Repository Purpose
-
-This repository accompanies the research on modular LoRaWAN simulation and gateway selection. It provides the complete framework implementation, representative optimization algorithms, experiment scripts, configuration files, and analysis tools required to reproduce the experimental results presented in the associated publications.
-
-A lightweight configuration is provided for quick validation and functional testing. Full-scale experiments can be executed separately for comprehensive performance evaluation.
-
----
-
-# Quick Start
-
-Run a representative experiment:
+## Running Simulations
 
 ```bash
 ./run.sh
 ```
+
+## Repository Structure
+
+- `src/` – Simulation source code
+- `scripts/` – Experiment automation scripts
+- `results/` – Generated simulation outputs
+- `analysis/` – Statistical analysis and plotting utilities
+- `docs/` – Documentation
+
+## License
+
+This repository is provided for academic and research purposes.
