@@ -6,7 +6,7 @@ The framework provides configurable communication models, propagation and RSSI m
 
 The repository also includes the implementation of the algorithms presented in the following work:
 
-> **Multi-Objective LoRaWAN Downlink Gateway Selection Using Evolutionary and CoATI-Based Metaheuristic Approaches**
+> **Multi-Objective LoRaWAN Downlink Gateway Selection Using Lightweight Heuristic and Metaheuristic Approaches**
 
 These algorithms are integrated as representative case studies within the framework and can be evaluated under identical communication and network configurations.
 
@@ -38,18 +38,15 @@ These algorithms are integrated as representative case studies within the framew
 ---
 
 ## Representative Gateway Selection Algorithms
-
+* Alg-HR
+* Alg-LB
+* Alg-LBHR
+* E-Alg-LBHR
 * CoATI
 * Improved-CoATI
 * Binary-CoATI
 * Genetic Algorithm (GA)
 * Particle Swarm Optimization (PSO)
-* CBS
-* ICBS
-* BCBS
-* Alg-HR
-* Alg-LB
-* Alg-LBHR
 
 The modular architecture allows researchers to incorporate additional heuristic, metaheuristic, evolutionary, or learning-based gateway selection and ADR algorithms without modifying the underlying communication models.
 
@@ -59,17 +56,9 @@ The modular architecture allows researchers to incorporate additional heuristic,
 
 The framework supports comparative evaluation using
 
-* Packet Delivery Ratio (PDR)
-* Effective Packet Delivery Ratio (Effective-PDR)
-* Throughput
 * Downlink Delay
-* Gateway Load Fairness
-* Energy Consumption
-* Packet Collisions
-* Gateway Utilization
 * ACK Success Rate
 * Retransmissions
-* Duty-Cycle Utilization
 
 ---
 
