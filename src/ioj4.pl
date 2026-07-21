@@ -1248,33 +1248,82 @@ sub alg_hr_assignment {
     return $idx[0]; 
 }
 
-sub alg_lb_assignment { 
-    my($d, $load) = @_; 
-    my @idx = sort {$load->[$a] <=> $load->[$b]} 0..$NUM_GW-1; 
-    return $idx[0]; 
-}
+# sub alg_lb_assignment { 
+#     my($d, $load) = @_; 
+#     my @idx = sort {$load->[$a] <=> $load->[$b]} 0..$NUM_GW-1; 
+#     return $idx[0]; 
+# }
+sub alg_lb_assignment {
+    my ($d,$load)=@_;
 
-sub alg_lbhr_assignment {
-    my ($d, $rssi, $load) = @_;
+    my $min_load = min(@$load);
+
+    my @candidate;
+
+    for my $g (0..$NUM_GW-1){
+        push @candidate,$g if $load->[$g]==$min_load;
+    }
+
+    return $candidate[int(rand(@candidate))];
+}
+sub e_alg_lbhr_assignment {
+    my ($d, $rssi, $snr, $load) = @_;
+
     my ($best, $best_sc) = (-1, -9e9);
 
     for my $g (0..$NUM_GW-1) {
-        my $norm_rssi  = ($rssi->[$d][$g] + 120) / 40;
-        $norm_rssi = 0 if $norm_rssi < 0; $norm_rssi = 1 if $norm_rssi > 1;
 
-        my $snr_dg     = calculate_snr($rssi->[$d][$g]);
-        my $norm_snr   = ($snr_dg + 20) / 30;
-        $norm_snr = 0 if $norm_snr < 0; $norm_snr = 1 if $norm_snr > 1;
+        # Normalize RSSI to [0,1]
+        my $norm_rssi = ($rssi->[$d][$g] + 120) / 40;
+        $norm_rssi = 0 if $norm_rssi < 0;
+        $norm_rssi = 1 if $norm_rssi > 1;
 
-        my $norm_load  = ($OVERLOAD_THRESH > 0) ? ($load->[$g] / $OVERLOAD_THRESH) : 0;
-        $norm_load = 1 if $norm_load > 1; $norm_load = 0 if $norm_load < 0;
+        # Normalize SNR to [0,1]
+        my $norm_snr = ($snr->[$d][$g] + 20) / 30;
+        $norm_snr = 0 if $norm_snr < 0;
+        $norm_snr = 1 if $norm_snr > 1;
 
-        my $score = $weights{ALPHA} * $norm_rssi
-                  + $weights{GAMMA} * $norm_snr
-                  - $weights{BETA}  * $norm_load;
+        # Normalize gateway load to [0,1]
+        my $norm_load = ($OVERLOAD_THRESH > 0)
+            ? ($load->[$g] / $OVERLOAD_THRESH)
+            : 0;
+        $norm_load = 0 if $norm_load < 0;
+        $norm_load = 1 if $norm_load > 1;
 
-        ($best, $best_sc) = ($g, $score) if $score > $best_sc;
+        # Weighted score
+        my $score =
+              $weights{ALPHA} * $norm_rssi
+            + $weights{GAMMA} * $norm_snr
+            - $weights{BETA}  * $norm_load;
+
+        if ($score > $best_sc) {
+            $best    = $g;
+            $best_sc = $score;
+        }
     }
+
+    return $best;
+}
+ sub alg_lbhr_assignment {
+    my ($d, $rssi, $load) = @_;
+
+    # Step 1: Find minimum gateway load
+    my $min_load = min(@$load);
+
+    # Step 2: Candidate gateways having minimum load
+    my @candidate;
+    for my $g (0..$NUM_GW-1) {
+        push @candidate, $g if $load->[$g] == $min_load;
+    }
+
+    # Step 3: Choose highest RSSI among candidates
+    my $best = $candidate[0];
+    foreach my $g (@candidate) {
+        if ($rssi->[$d][$g] > $rssi->[$d][$best]) {
+            $best = $g;
+        }
+    }
+
     return $best;
 }
 
@@ -1688,17 +1737,32 @@ sub main {
             push @assign_ALG_LBHR, { device => $d, gateway => $gw };
             $gw_load[$gw]++;
         }
+        # E-Alg-LBHR
+my @assign_E_ALG_LBHR;
+@gw_load = (0) x $NUM_GW;
+
+for my $d (0..$NUM_DEV-1) {
+    my $gw = e_alg_lbhr_assignment($d, $RSSI, $SNR, \@gw_load);
+
+    push @assign_E_ALG_LBHR, {
+        device  => $d,
+        gateway => $gw
+    };
+
+    $gw_load[$gw]++;
+}
         
-        %assignments = (
-            'CoATI'          => coati_assign($RSSI, $SNR, $OPTIONS{interf}, $CHAN_USED),
-            'Improved-CoATI' => improved_coati_assign($RSSI, $SNR, $OPTIONS{interf}, $CHAN_USED),
-            'Binary-CoATI'   => binary_coati_assign($RSSI, $SNR, $OPTIONS{interf}, $CHAN_USED),
-            'GA'             => ga_assign($RSSI, $SNR, $OPTIONS{interf}, $CHAN_USED),
-            'PSO'            => pso_assign($RSSI, $SNR, $OPTIONS{interf}, $CHAN_USED),
-            'Alg-HR'         => [ map { {device=>$_, gateway=>alg_hr_assignment($_,$RSSI)} } 0..$NUM_DEV-1 ],
-            'Alg-LB'         => \@assign_ALG_LB,
-            'Alg-LBHR'       => \@assign_ALG_LBHR,
-        );
+       %assignments = (
+    'CoATI'          => coati_assign($RSSI, $SNR, $OPTIONS{interf}, $CHAN_USED),
+    'Improved-CoATI' => improved_coati_assign($RSSI, $SNR, $OPTIONS{interf}, $CHAN_USED),
+    'Binary-CoATI'   => binary_coati_assign($RSSI, $SNR, $OPTIONS{interf}, $CHAN_USED),
+    'GA'             => ga_assign($RSSI, $SNR, $OPTIONS{interf}, $CHAN_USED),
+    'PSO'            => pso_assign($RSSI, $SNR, $OPTIONS{interf}, $CHAN_USED),
+    'Alg-HR'         => [ map { {device=>$_, gateway=>alg_hr_assignment($_,$RSSI)} } 0..$NUM_DEV-1 ],
+    'Alg-LB'         => \@assign_ALG_LB,
+    'Alg-LBHR'       => \@assign_ALG_LBHR,
+    'E-Alg-LBHR'     => \@assign_E_ALG_LBHR,
+);
         
         my %metrics; 
         my $best_alg; 
