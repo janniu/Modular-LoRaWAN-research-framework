@@ -99,7 +99,7 @@ my $RETRY_PENALTY = 0.02;
 my $BASE_LATENCY = 10;
 my $LOAD_LAT_FACTOR = 5;
 my $DIST_LAT_FACTOR = 2;
-my $MAX_RETRIES = 3;
+my $MAX_RETRIES = 2;
 
 # Scenario parameters
 my %SCENARIOS = (
@@ -1767,6 +1767,9 @@ for my $d (0..$NUM_DEV-1) {
         my %metrics; 
         my $best_alg; 
         my $best_pdr = -1;
+        my $best_ack_rate  = 0;
+        my $best_retx_rate = 0;
+        my $best_delay     = 0;
 
         foreach my $alg (keys %assignments) {
             #next if $OPTIONS{alg} ne 'all' && $OPTIONS{alg} ne $alg;
@@ -1816,23 +1819,34 @@ print $ALG_FH join(',', (
             
             # Update best algorithm - FIXED: Check if best_alg is defined
             if (defined $best_alg) {
-                if ($pdr > $best_pdr || 
-                    ($pdr == $best_pdr && $e < $metrics{$best_alg}[3])) {
-                    $best_alg = $alg; 
-                    $best_pdr = $pdr;
-                }
-            } else {
-                $best_alg = $alg;
-                $best_pdr = $pdr;
-            }
+    if ($pdr > $best_pdr ||
+        ($pdr == $best_pdr && $e < $metrics{$best_alg}[3])) {
+
+        $best_alg       = $alg;
+        $best_pdr       = $pdr;
+        $best_ack_rate  = $ack_rate;
+        $best_retx_rate = $retx_rate;
+        $best_delay     = $delay;
+    }
+} else {
+    $best_alg       = $alg;
+    $best_pdr       = $pdr;
+    $best_ack_rate  = $ack_rate;
+    $best_retx_rate = $retx_rate;
+    $best_delay     = $delay;
+}
         }
 
         # FIXED: Check if best_alg is defined before printing
         if (defined $best_alg) {
-            print "Best algorithm this iteration: $best_alg (PDR=", sprintf("%.3f", $best_pdr), ")\n";
-        } else {
-            print "No valid algorithms processed this iteration\n";
-        }
+    printf "Best algorithm this iteration: %s (ACK=%.3f, RETX=%.3f, Delay=%.2f ms)\n",
+        $best_alg,
+        $best_ack_rate,
+        $best_retx_rate,
+        $best_delay;
+} else {
+    print "No valid algorithms processed this iteration\n";
+}
         $current_time += 3600;
     }
 
