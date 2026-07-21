@@ -99,7 +99,7 @@ my $RETRY_PENALTY = 0.02;
 my $BASE_LATENCY = 10;
 my $LOAD_LAT_FACTOR = 5;
 my $DIST_LAT_FACTOR = 2;
-my $MAX_RETRIES = 2;
+my $MAX_RETRIES = 3;
 
 # Scenario parameters
 my %SCENARIOS = (
